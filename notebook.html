@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>notebook</title>
+        <!-- Font Awesome 4.7 -->
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            crossorigin="anonymous"
+        />
+        <!-- Google font -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Work+Sans&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Handlee&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            body {
+                background-color: rgba(0, 0, 0, 0.05);
+                font-family: "Work Sans", sans-serif;
+            }
+
+            #view {
+                background-color: rgb(255, 255, 255);
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                padding: 0;
+                border-radius: 2px;
+                min-width: 300px;
+                box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.1);
+                border: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            h2 {
+                padding: 0 10px;
+                font-family: "Handlee", cursive;
+                color: brown;
+            }
+
+            ul {
+                padding: 0;
+                margin-bottom: 0.3em;
+            }
+
+            li {
+                display: flex;
+                padding: 10px 5px;
+                list-style: none;
+            }
+
+            .typeIn {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+            }
+
+            .notes {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            #index {
+                font-size: 0.7em;
+                color: rgba(0, 0, 0, 0.5);
+                padding-right: 10px;
+            }
+
+            li > input {
+                border: 0;
+                flex-grow: 1;
+                font-family: "Work Sans", sans-serif;
+                color: rgba(0, 0, 0, 0.7);
+                font-size: 0.8em;
+            }
+
+            li > input:focus {
+                outline: none;
+            }
+
+            .fa {
+                display: none !important;
+                color: rgba(0, 0, 0, 0.3);
+                font-size: 0.75em;
+            }
+
+            .fa:hover {
+                cursor: pointer;
+            }
+
+            li:hover .fa {
+                display: block !important;
+            }
+
+            #footer {
+                font-size: 0.5em;
+                padding: 0 5px 5px 5px;
+                color: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: space-between;
+            }
+            #footer > a {
+                color: rgba(0, 0, 0, 0.5);
+                text-decoration: none;
+            }
+            #footer > a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <div id="view">
+                <h2>Easy Note</h2>
+                <ul>
+                    <li class="typeIn">
+                        <input
+                            type="text"
+                            @keyup.13="createNote(note)"
+                            :placeholder="note"
+                            v-model="note"
+                        />
+                    </li>
+                    <li class="notes" v-for="(item, index) in notes">
+                        <div id="index">{{ index + 1 }}.</div>
+                        <input
+                            type="text"
+                            v-model="item.content"
+                            @keyup.13="modifyNote(index, item.content)"
+                        />
+                        <i class="fa fa-times" @click="deleteNote(index)"></i>
+                    </li>
+                </ul>
+                <div id="footer">
+                    <div><strong>{{ notes.length }}</strong> notes left</div>
+                    <a href="#" @click="deleteAll">clear</a>
+                </div>
+            </div>
+        </div>
+        <!-- production version, optimized for size and speed -->
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script>
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    notes: [
+                        { content: "Hello Vue!" },
+                        { content: "This is a great note app!" },
+                    ],
+                    upHere: false,
+                    note: "New note...",
+                },
+                methods: {
+                    createNote: function (note) {
+                        //this.notes.unshift({ content: note });
+                        this.notes.push({ content: note });
+                    },
+                    // delete the selected note
+                    deleteNote: function (index) {
+                        this.notes.splice(index, 1);
+                    },
+                    modifyNote: function (index, note) {
+                        this.notes[index].content = note;
+                    },
+                    deleteAll: function () {
+                        this.notes = [];
+                    },
+                },
+            });
+        </script>
+    </body>
+</html>
